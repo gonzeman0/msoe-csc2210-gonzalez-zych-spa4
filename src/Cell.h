@@ -6,6 +6,7 @@
 #define CELL_H
 
 #include "item.h"
+#include <iostream>
 
 
 /// - ROOM: A cell that can contain items and the player.
@@ -47,9 +48,9 @@ class Cell {
         bool hasPlayer() const { return has_player; }
         bool hasWumpus() const { return has_wumpus; }
 
-        Item* pickupItem() { Item* ret = item; item = nullptr; return ret; }
-        void setHasPlayer(const bool has_p) { this->has_player = has_p; }
-        void setHasWumpus(const bool has_w) { this->has_wumpus = has_w; }
+        Item* pickupItem();
+        void setHasPlayer(bool has_p);
+        void setHasWumpus(bool has_w);
 
 
 };

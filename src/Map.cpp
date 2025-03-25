@@ -23,14 +23,14 @@ Map::Map() {
     unsigned int map_count = 0;
     bool valid_map_created = false;
     while (!valid_map_created) {
+        std::cout << "DEBUG MSG: Generating map..." << std::endl;
         map_count++;
         initializeGrid();
         addRandomHazards(PIT_COUNT, BAT_COUNT, GAS_COUNT);
         valid_map_created = isTraversable();
     }
 
-    std::cout << "Found a worthy map after " << map_count << " tries!" << std::endl;
-    printGrid();
+    placeExit();
 }
 
 void Map::printGrid() const {
@@ -82,7 +82,7 @@ void Map::printGrid() const {
             if (grid[row][col].has_wumpus) {
                 displayChar = 'W';
             } else if (grid[row][col].has_player) {
-                displayChar = 'P';
+                displayChar = '@';
             }
 
             // Print the character for this cell
@@ -233,3 +233,64 @@ void Map::findTraversable(const size_t row, const size_t col, unsigned int& numF
     findTraversable(row, col - 1, numFound);
     findTraversable(row, col + 1, numFound);
 }
+
+void Map::placeExit() {
+    while (true) {
+        // Generate random row and column
+        const size_t row = std::rand() % ROWS;
+        const size_t col = std::rand() % COLS;
+
+        // Get the cell at the random coordinates
+        Cell* cell = &grid[row][col];
+        if (cell->type == ROOM && !cell->hasPlayer() && !cell->hasWumpus()) {
+            cell->type = EXIT;
+            return;
+        }
+    }
+}
+
+
+Cell& Map::spawnWumpus() {
+    while (true) {
+        // Generate random row and column
+        const size_t row = std::rand() % ROWS;
+        const size_t col = std::rand() % COLS;
+
+        // Get the cell at the random coordinates
+        Cell* cell = &grid[row][col];
+        if (!cell->hasPlayer() && !cell->hasWumpus()) {
+            cell->setHasWumpus(true);
+            return *cell;
+        }
+    }
+}
+
+Cell& Map::spawnPlayer() {
+    // Seed the random number generator if needed (optional, depending on the application setup)
+    std::srand(static_cast<unsigned>(std::time(nullptr)));
+
+    while (true) {
+        // Generate random row and column
+        const size_t row = std::rand() % ROWS;
+        const size_t col = std::rand() % COLS;
+
+        // Get the cell at the random coordinates
+        Cell* cell = &grid[row][col];
+        if (cell->type == ROOM && !cell->hasPlayer() && !cell->hasWumpus()) {
+            cell->setHasPlayer(true);
+            return *cell;
+        }
+    }
+}
+
+Cell* Map::getCell(size_t row, size_t col) {
+    // Check if the row and column are within the valid range
+    if (row < ROWS && col < COLS) {
+        return &grid[row][col]; // Return a pointer to the cell
+    }
+    return nullptr; // Coordinates are out of bounds
+}
+
+
+
+

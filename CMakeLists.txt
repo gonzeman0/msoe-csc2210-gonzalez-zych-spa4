@@ -3,4 +3,12 @@ project(spa4_wumpus_game)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(spa4_wumpus_game src/main.cpp src/map.cpp src/Cell.h)
+add_executable(
+        spa4_wumpus_game
+        src/main.cpp
+        src/Cell.cpp
+        src/Map.cpp
+        src/Game.cpp
+        src/Player.cpp
+
+)
