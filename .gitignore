@@ -1,0 +1,27 @@
+# CLion / CMake build folders
+cmake-build-*/
+CMakeFiles/
+CMakeCache.txt
+Makefile
+build/
+*.cbp
+
+# JetBrains IDE config
+.idea/
+*.iml
+
+# Compiled object files and binaries
+*.o
+*.obj
+*.so
+*.a
+*.out
+*.exe
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Backup / temp files
+*~
+*.swp
