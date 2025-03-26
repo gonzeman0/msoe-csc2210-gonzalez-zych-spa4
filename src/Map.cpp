@@ -2,7 +2,7 @@
 // Created by gonzalezem on 3/24/2025.
 //
 
-#include "Map.h"
+#include "../include/Map.h"
 #include <iostream>
 #include <cstdlib>  // For random number generation
 #include <ctime>    // For random number generation

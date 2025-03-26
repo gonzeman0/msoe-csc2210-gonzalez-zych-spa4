@@ -1,5 +1,5 @@
 
-#include "Cell.h"
+#include "../include/Cell.h"
 #include <iostream>
 
 /**
@@ -18,16 +18,6 @@ Item* Cell::pickupItem() {
 void Cell::setHasPlayer(const bool has_p) {
     if (has_p == false) { // This action is always allowed
         this->has_player = has_p;
-        return;
-    }
-
-    // Check for illegal actions
-    if (this->has_wumpus) {
-        std::cerr << "ERROR in Cell::setHasPlayer(): Player and wumpus can't share a cell." << std::endl;
-        return;
-    }
-    if (this->type == PIT || this->type == BAT) {
-        std::cerr << "ERROR in Cell::setHasPlayer(): Player can't be non-traversable cell. Game should handle this logic" << std::endl;
         return;
     }
 

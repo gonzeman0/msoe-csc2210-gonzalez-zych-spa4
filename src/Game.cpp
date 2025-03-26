@@ -2,8 +2,8 @@
 // Created by gonzalezem on 3/25/2025.
 //
 
-#include "Game.h"
-#include "Player.h"
+#include "../include/Game.h"
+#include "../include/Player.h"
 #include <iostream>
 
 Game::Game(): map(), gameOver(false), player(map.spawnPlayer()) {}
@@ -14,7 +14,7 @@ void Game::start() {
         map.printGrid();
         input = promptUser("Player = @. Move ('N', 'E', 'S', 'W') or exit ('EXIT'): ");
         if (input.length() == 1)
-            player.move(input[0]);
+            gameOver = player.move(input[0]);
         else if (input == "EXIT")
             gameOver = true;
         else

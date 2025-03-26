@@ -41,7 +41,8 @@ class Player {
         *                  'N' for North, 'E' for East, 'S' for South, and 'W' for West.
         *                  Any other input is considered invalid and logs an error.
         */
-        void move(char direction);
+        bool move(char direction);
+        bool quickMove(char direction);
 
         /**
          * Adds an item to the player's inventory or increases its count if it already exists.
@@ -49,6 +50,9 @@ class Player {
          * @param item Pointer to the item to be added to the inventory. If the pointer is null, the method does nothing.
          */
         void pickup(Item* item);
+
+        bool isInHazzard(Cell *cell);
+        void randomMove();
 
         // Returns a reference to the player's inventory.
         std::map<std::string, int>& getInventory() { return inventory; };
