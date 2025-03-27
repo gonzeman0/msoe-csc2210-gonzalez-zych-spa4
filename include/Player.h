@@ -5,14 +5,17 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include "Cell.h"
+#include "Item.h"
+
 #include <map>
 #include <string>
 
+class Cell;
+class Item;
 
 class Player {
     Cell* current_cell;                     // Pointer to the cell the player is currently in
-    std::map<std::string, int> inventory;   // Map of the item name to item count
+    std::map<Item*, int> inventory;   // Map of the item name to item count
 
     public:
         /**
@@ -50,12 +53,16 @@ class Player {
          * @param item Pointer to the item to be added to the inventory. If the pointer is null, the method does nothing.
          */
         void pickup(Item* item);
+        void destroyItem(Item* item);
 
-        bool isInHazzard(Cell *cell);
+        bool isInHazzard(Cell* cell);
         void randomMove();
 
+        std::map<char, Item*> displayInventory();
+        bool useItem();
         // Returns a reference to the player's inventory.
-        std::map<std::string, int>& getInventory() { return inventory; };
+        std::map<Item*, int>& getInventory() { return inventory; }
+
 
         // Returns a pointer to the players current cell.
         Cell* getCurrentCell() const { return current_cell; }

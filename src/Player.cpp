@@ -3,7 +3,10 @@
 //
 
 #include "../include/Player.h"
-#include "../include/Cell.h"
+#include "../include/cell.h"
+#include "../include/Bow.h"
+#include "../include/Item.h"
+
 #include <iostream>
 #include <random>
 
@@ -17,6 +20,7 @@ Player::Player(Cell& starting_cell): inventory() {
         return;
     }
 
+    pickup(new Bow("Bow", 'b'));
     current_cell = &starting_cell;
     current_cell->setHasPlayer(true);
 }
@@ -51,6 +55,8 @@ bool Player::move(const char direction) {
     to_cell->setHasPlayer(true);
     current_cell = to_cell;
 
+    this->pickup(this->getCurrentCell()->pickupItem());
+
     if(isInHazzard(current_cell)) return true;
     return false;
 }
@@ -58,14 +64,27 @@ bool Player::move(const char direction) {
 void Player::pickup(Item* item) {
     if (item == nullptr)
         return;
-    auto it = inventory.find(item->name);
+    auto it = inventory.find(item);
     if (it != inventory.end()) {
         // If the item exists in inventory, increment the count
         it->second++;
     } else {
         // If the item does not exist, add it with a count of 1
-        inventory[item->name] = 1;
+        inventory[item] = 1;
     }
+}
+
+void Player::destroyItem(Item* item) {
+  if (item == nullptr)
+    return;
+  auto it = inventory.find(item);
+  if (it != inventory.end()) {
+    // If the item exists in inventory, increment the count
+    it->second--;
+  }
+
+  if(it->second == 0) inventory.erase(item);
+
 }
 
 bool Player::isInHazzard(Cell* cell){
@@ -79,7 +98,7 @@ bool Player::isInHazzard(Cell* cell){
     case BAT:
       randomMove();
       current_cell -> setHasPlayer(true);
-      return isInHazzard(cell);
+      return isInHazzard(current_cell);
     case GAS:
       return false;
     default:
@@ -129,4 +148,34 @@ bool Player::quickMove(char direction){
   current_cell = newCell;
   return true;
 }
+
+std::map<char, Item*> Player::displayInventory(){
+
+  std::cout << "Your inventory. Type the letter next to the item to use or Cancel(c)" <<std::endl;
+  std::map<char, Item*> items;
+  for (const auto& pair : inventory) {
+    std::cout << "You have " << pair.second << " " << pair.first->getName() << " (" << pair.first->getCharacter() << ")" <<std::endl;
+    items[pair.first->getCharacter()] = pair.first;
+  }
+  return items;
+}
+
+bool Player::useItem(){
+
+  Item* itemToUse;
+  while(true){
+    std::map<char, Item*> items = this->displayInventory();
+    char choice;
+    std::cin >> choice;
+
+    if(choice == 'c') return false;
+    itemToUse = items[choice];
+    if(itemToUse == nullptr) continue;
+    return itemToUse->useItem(this->getCurrentCell(), this);
+  }
+}
+
+
+
+
 

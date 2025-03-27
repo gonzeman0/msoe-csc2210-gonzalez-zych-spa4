@@ -5,8 +5,10 @@
 #ifndef CELL_H
 #define CELL_H
 
-#include "item.h"
+#include "Item.h"
+
 #include <iostream>
+#include <string>
 
 
 /// - ROOM: A cell that can contain items and the player.
@@ -21,6 +23,8 @@ enum CellType {
     BAT,
     GAS
 };
+
+class Item;
 
 /// Represents a single cell in the game, which maintains its type, 
 /// connections to adjacent cells, any item it contains, 
@@ -47,14 +51,14 @@ class Cell {
         Item* getItem() const { return item; }
         bool hasPlayer() const { return has_player; }
         bool hasWumpus() const { return has_wumpus; }
+        std::string getProximityMessage();
+        std::string getCurrentCellMessage();
+        std::string getDeathMessage();
+        std::string getBasicThrowMessage(std::string message);
 
         Item* pickupItem();
         void setHasPlayer(bool has_p);
         void setHasWumpus(bool has_w);
-
-
 };
-
-
 
 #endif //CELL_H
