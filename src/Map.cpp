@@ -83,6 +83,8 @@ void Map::printGrid() const {
                 displayChar = 'W';
             } else if (grid[row][col].has_player) {
                 displayChar = '@';
+            } else if(grid[row][col].getItem() != nullptr) {
+                displayChar = grid[row][col].getItem()->getCharacter();
             }
 
             // Print the character for this cell
@@ -258,6 +260,7 @@ Cell& Map::spawnWumpus() {
 
         // Get the cell at the random coordinates
         Cell* cell = &grid[row][col];
+        if(cell->getType() == PIT || cell->getType() == BAT || cell->getType() == EXIT) continue;
         if (!cell->hasPlayer() && !cell->hasWumpus()) {
             cell->setHasWumpus(true);
             return *cell;

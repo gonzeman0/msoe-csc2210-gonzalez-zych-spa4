@@ -5,12 +5,14 @@
 #include "../include/Player.h"
 #include "../include/cell.h"
 #include "../include/Bow.h"
+#include "../include/Arrow.h"
 #include "../include/Item.h"
 
 #include <iostream>
 #include <random>
 
 Player::Player(Cell& starting_cell): inventory() {
+
     if (!starting_cell.hasPlayer()) {
         std::cerr << "ERROR in Player(): Starting cell must be previously assigned via Map::spawnPlayer()" << std::endl;
         return;
@@ -20,7 +22,8 @@ Player::Player(Cell& starting_cell): inventory() {
         return;
     }
 
-    pickup(new Bow("Bow", 'b'));
+    pickup(new Bow());
+    pickup(new Arrow());
     current_cell = &starting_cell;
     current_cell->setHasPlayer(true);
 }
@@ -65,6 +68,7 @@ void Player::pickup(Item* item) {
     if (item == nullptr)
         return;
     auto it = inventory.find(item);
+    std::cout << "You picked up " << item->getName() << std::endl;
     if (it != inventory.end()) {
         // If the item exists in inventory, increment the count
         it->second++;
@@ -74,17 +78,19 @@ void Player::pickup(Item* item) {
     }
 }
 
-void Player::destroyItem(Item* item) {
-  if (item == nullptr)
-    return;
-  auto it = inventory.find(item);
-  if (it != inventory.end()) {
-    // If the item exists in inventory, increment the count
-    it->second--;
+void Player::destroyItem(char useCharacter) {
+
+  Item* itemToDestroy;
+  for (const auto& pair : inventory) {
+    if (pair.first->getCharacter() == useCharacter) {
+
+      itemToDestroy = pair.first;
+      inventory[pair.first]--;
+      std::cout << pair.first->getName() << " was lost" << std::endl;
+
+      if(inventory[pair.first] == 0) inventory.erase(itemToDestroy);
+    }
   }
-
-  if(it->second == 0) inventory.erase(item);
-
 }
 
 bool Player::isInHazzard(Cell* cell){
@@ -149,30 +155,42 @@ bool Player::quickMove(char direction){
   return true;
 }
 
-std::map<char, Item*> Player::displayInventory(){
-
+void Player::displayInventory(){
   std::cout << "Your inventory. Type the letter next to the item to use or Cancel(c)" <<std::endl;
-  std::map<char, Item*> items;
   for (const auto& pair : inventory) {
     std::cout << "You have " << pair.second << " " << pair.first->getName() << " (" << pair.first->getCharacter() << ")" <<std::endl;
-    items[pair.first->getCharacter()] = pair.first;
   }
-  return items;
 }
 
 bool Player::useItem(){
 
   Item* itemToUse;
   while(true){
-    std::map<char, Item*> items = this->displayInventory();
+    this->displayInventory();
     char choice;
     std::cin >> choice;
 
     if(choice == 'c') return false;
-    itemToUse = items[choice];
+
+    for (const auto& pair : inventory) {
+      if (pair.first->getCharacter() == choice) {
+        itemToUse = pair.first;
+        break;
+      }
+    }
+
     if(itemToUse == nullptr) continue;
     return itemToUse->useItem(this->getCurrentCell(), this);
   }
+}
+
+bool Player::hasItem(char useCharacter){
+  for (const auto& pair : inventory) {
+    if (pair.first->getCharacter() == useCharacter) {
+      return true;
+    }
+  }
+  return false;
 }
 
 

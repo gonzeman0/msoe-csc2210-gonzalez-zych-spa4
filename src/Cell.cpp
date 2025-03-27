@@ -63,7 +63,7 @@ std::string Cell::getCurrentCellMessage(){
   switch (this->getType()){
     case ROOM:
       if(this->getItem() == nullptr) return "";
-      return "You pick up a item\n";
+      return "You pick up a "+ this->getItem()->getName() +"\n";
     case EXIT:
       return "There is a bright light up above you\n";
     case BAT:
@@ -81,7 +81,7 @@ std::string Cell::getDeathMessage(){
     case PIT:
       return "You fall down an endless pit for eternity\n";
     case GAS:
-      return "You ignite a flammable gas at get incinerated\n";
+      return "You ignite a flammable gas and get incinerated\n";
     default:
       return "You died";
   }

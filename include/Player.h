@@ -15,7 +15,7 @@ class Item;
 
 class Player {
     Cell* current_cell;                     // Pointer to the cell the player is currently in
-    std::map<Item*, int> inventory;   // Map of the item name to item count
+    std::map<Item*, int> inventory; // Map of the item name to item count
 
     public:
         /**
@@ -53,15 +53,16 @@ class Player {
          * @param item Pointer to the item to be added to the inventory. If the pointer is null, the method does nothing.
          */
         void pickup(Item* item);
-        void destroyItem(Item* item);
+        void destroyItem(char useCharacter);
 
         bool isInHazzard(Cell* cell);
         void randomMove();
 
-        std::map<char, Item*> displayInventory();
+        void displayInventory();
         bool useItem();
         // Returns a reference to the player's inventory.
         std::map<Item*, int>& getInventory() { return inventory; }
+        bool hasItem(char useCharacter);
 
 
         // Returns a pointer to the players current cell.

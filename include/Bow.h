@@ -13,10 +13,10 @@
 
 class Bow : public Item {
 public:
-  Bow(std::string name, char useCharacter);
+  Bow();
 
   bool useItem(Cell* originCell, Player* player);
-  void shoot(Cell* originCell);
+  bool shoot(Cell* originCell, Player* player);
 };
 
 #endif //BOW_H

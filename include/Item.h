@@ -12,6 +12,11 @@
 class Cell;
 class Player;
 
+enum ItemCharacter{
+  BOW = 'b',
+  ARROW = 'a'
+};
+
 class Item {
 public:
     std::string getName() const { return name; }

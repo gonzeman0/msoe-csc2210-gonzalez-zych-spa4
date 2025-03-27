@@ -3,11 +3,11 @@
 //
 
 #include "../include/Bow.h"
+#include "../include/Arrow.h"
 
-#include "../include/Cell.h"
 #include <iostream>
 
-Bow::Bow(std::string name, char useCharacter) : Item(name, useCharacter) {}
+Bow::Bow() : Item("bow", 'b') {}
 
 bool Bow::useItem(Cell* originCell, Player* player){
   char choice;
@@ -16,8 +16,7 @@ bool Bow::useItem(Cell* originCell, Player* player){
 
   switch(choice){
     case 's':
-
-      return false;
+      return shoot(originCell, player);
     case 't':
       {
         std::string result = Item::basicThrow(originCell, player);
@@ -32,6 +31,25 @@ bool Bow::useItem(Cell* originCell, Player* player){
   }
 }
 
-void Bow::shoot(Cell* originCell){
+bool Bow::shoot(Cell* originCell, Player* player){
+  if(!player->hasItem('a')){
+    std::cout << "You have nothing to shoot" << std::endl;
+    return useItem(originCell, player);
+  }
+  Cell* cell = Item::promptForDirection(originCell, "shoot");
+  if(cell == nullptr) useItem(originCell, player);
 
+  player->destroyItem(ItemCharacter::ARROW);
+  if(cell->hasWumpus()){
+    cell->setHasWumpus(false);
+    std::cout << "You hear a yelp in the distance" << std::endl;
+    cell->setItem(new Arrow());
+  } else if(cell->getType() == BAT){
+    cell->setType(ROOM);
+    std::cout << "You hear a sqeak and a thud in the distance" << std::endl;
+    cell->setItem(new Arrow());
+  } else{
+    std::cout << cell->getBasicThrowMessage("arrow");
+  }
+  return false;
 }

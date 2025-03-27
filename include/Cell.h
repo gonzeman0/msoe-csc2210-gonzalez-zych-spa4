@@ -56,9 +56,13 @@ class Cell {
         std::string getDeathMessage();
         std::string getBasicThrowMessage(std::string message);
 
+
+
         Item* pickupItem();
+        void setItem(Item* item) { this->item = item; }
         void setHasPlayer(bool has_p);
         void setHasWumpus(bool has_w);
+        void setType(CellType type) { this->type = type; };
 };
 
 #endif //CELL_H

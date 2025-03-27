@@ -12,14 +12,30 @@
 Item::Item(std::string name, char useCharacter) : name(name), useCharacter(useCharacter){}
 
 bool Item::useItem(Cell* originCell, Player* player){
-  return false;
+  char choice;
+  std::cout << "How do you want to use " << this->name << ". Throw(t), Cancel(c)" << std::endl;
+  std::cin >> choice;
+
+  switch(choice){
+    case 't':
+      {
+        std::string result = Item::basicThrow(originCell, player);
+        if(result == "") useItem(originCell, player);
+        std::cout << result << std::endl << std::endl;
+        return false;
+      }
+    case 'c':
+      return false;
+    default:
+      return this->useItem(originCell, player);
+  }
 }
 
 std::string Item::basicThrow(Cell* originCell, Player* player) {
   Cell* cell = this->promptForDirection(originCell, "throw");
   if(cell == nullptr) return"";
 
-  player->destroyItem(this);
+  player->destroyItem(this->getCharacter());
   return cell->getBasicThrowMessage(this->getName());
 }
 
@@ -49,7 +65,7 @@ Cell* Item::promptForDirection(Cell* originCell, std::string message){
   }
 
   if(cell == nullptr){
-    std::cout << "There is only a wall that direction" << std::endl;
+    std::cout << "There is nothing that direction" << std::endl;
     return this->promptForDirection(originCell ,message);
   }
   return cell;
