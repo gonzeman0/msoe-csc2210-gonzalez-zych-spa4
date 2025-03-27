@@ -82,6 +82,10 @@ std::string Cell::getDeathMessage(){
       return "You fall down an endless pit for eternity\n";
     case GAS:
       return "You ignite a flammable gas and get incinerated\n";
+    case EXIT:
+      return "You climb the rope to the hole above and escape\nYou Win!!!\n";
+    case OPEN_EXIT:
+      return "An explosion opend up a way out of the cave\nYou Win!!!\n";
     default:
       return "You died";
   }

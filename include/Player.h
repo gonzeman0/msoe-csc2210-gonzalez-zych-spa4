@@ -15,7 +15,8 @@ class Item;
 
 class Player {
     Cell* current_cell;                     // Pointer to the cell the player is currently in
-    std::map<Item*, int> inventory; // Map of the item name to item count
+    std::map<Item*, int> inventory;// Map of the item name to item count
+    bool usingRope;
 
     public:
         /**
@@ -55,7 +56,7 @@ class Player {
         void pickup(Item* item);
         void destroyItem(char useCharacter);
 
-        bool isInHazzard(Cell* cell);
+        bool isInHazzard(Cell* cell, Cell* previousCell);
         void randomMove();
 
         void displayInventory();
@@ -67,6 +68,8 @@ class Player {
 
         // Returns a pointer to the players current cell.
         Cell* getCurrentCell() const { return current_cell; }
+        bool isUsingRope() { return usingRope; }
+        void setUsingRope(bool value) { usingRope = value; }
 
 };
 

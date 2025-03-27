@@ -74,6 +74,9 @@ void Map::printGrid() const {
                 case EXIT:
                     displayChar = 'E'; // Exit
                 break;
+                case OPEN_EXIT:
+                    displayChar = 'O'; // Exit
+                break;
                 default:
                     displayChar = '?'; // Unknown or special case
                 break;

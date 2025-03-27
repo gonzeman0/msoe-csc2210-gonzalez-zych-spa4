@@ -21,7 +21,8 @@ enum CellType {
     EXIT,
     PIT,
     BAT,
-    GAS
+    GAS,
+    OPEN_EXIT
 };
 
 class Item;

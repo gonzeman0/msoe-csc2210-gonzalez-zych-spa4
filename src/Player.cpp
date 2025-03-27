@@ -7,6 +7,9 @@
 #include "../include/Bow.h"
 #include "../include/Arrow.h"
 #include "../include/Item.h"
+#include "../include/Rope.h"
+#include "../include/Bomb.h"
+
 
 #include <iostream>
 #include <random>
@@ -24,6 +27,8 @@ Player::Player(Cell& starting_cell): inventory() {
 
     pickup(new Bow());
     pickup(new Arrow());
+    pickup(new Rope());
+    pickup(new Bomb());
     current_cell = &starting_cell;
     current_cell->setHasPlayer(true);
 }
@@ -54,13 +59,16 @@ bool Player::move(const char direction) {
         return false;
     }
 
+    Cell* previousCell = current_cell;
     current_cell->setHasPlayer(false);
     to_cell->setHasPlayer(true);
     current_cell = to_cell;
 
+    if(current_cell->getType() == OPEN_EXIT) return true;
+
     this->pickup(this->getCurrentCell()->pickupItem());
 
-    if(isInHazzard(current_cell)) return true;
+    if(isInHazzard(current_cell, previousCell)) return true;
     return false;
 }
 
@@ -93,21 +101,44 @@ void Player::destroyItem(char useCharacter) {
   }
 }
 
-bool Player::isInHazzard(Cell* cell){
+bool Player::isInHazzard(Cell* cell, Cell* previousCell) {
   if(!cell->hasPlayer()) return false;
 
   if(cell->hasWumpus()) return true;
 
   switch(cell->getType()) {
     case PIT:
+      if(this->isUsingRope()){
+        std::cout << "There was a endless pit\nbut you get away by climbing your rope" << std::endl;
+        this->setUsingRope(false);
+        current_cell->setHasPlayer(false);
+        current_cell = previousCell;
+        current_cell->setHasPlayer(true);
+        this->destroyItem(ItemCharacter::ROPE);;
+        return false;
+      }
       return true;
     case BAT:
+      if(this->isUsingRope()){
+        std::cout << "There was a giant bat that tried to take you\nbut you get away using being tied to a rope" << std::endl;
+        this->setUsingRope(false);
+        current_cell->setHasPlayer(false);
+        current_cell = previousCell;
+        current_cell->setHasPlayer(true);
+        this->destroyItem(ItemCharacter::ROPE);
+        return false;
+      }
+      std::cout << "A giant bat picks you up and moves you somewhere else" << std::endl;
       randomMove();
       current_cell -> setHasPlayer(true);
-      return isInHazzard(current_cell);
+      return isInHazzard(current_cell, previousCell);
     case GAS:
       return false;
     default:
+      if(this->isUsingRope()){
+        this->destroyItem(ItemCharacter::ROPE);
+        std::cout << "As you enter the room your rope gets cut by a rock" << std::endl;
+      }
       return false;
   }
 }

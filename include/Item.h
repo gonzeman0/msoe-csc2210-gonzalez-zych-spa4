@@ -14,7 +14,9 @@ class Player;
 
 enum ItemCharacter{
   BOW = 'b',
-  ARROW = 'a'
+  ARROW = 'a',
+  ROPE = 'r',
+  BOMB = 'd'
 };
 
 class Item {
