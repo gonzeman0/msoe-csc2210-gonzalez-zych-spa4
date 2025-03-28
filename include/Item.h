@@ -13,10 +13,10 @@ class Cell;
 class Player;
 
 enum ItemCharacter{
-  BOW = 'b',
-  ARROW = 'a',
-  ROPE = 'r',
-  BOMB = 'd'
+  BOW = ')',
+  ARROW = '>',
+  ROPE = '?',
+  BOMB = 'D'
 };
 
 class Item {

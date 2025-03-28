@@ -32,7 +32,7 @@ bool Bow::useItem(Cell* originCell, Player* player){
 }
 
 bool Bow::shoot(Cell* originCell, Player* player){
-  if(!player->hasItem('a')){
+  if(!player->hasItem(ItemCharacter::ARROW)){
     std::cout << "You have nothing to shoot" << std::endl;
     return useItem(originCell, player);
   }
