@@ -9,6 +9,7 @@
 #include "../include/Item.h"
 #include "../include/Rope.h"
 #include "../include/Bomb.h"
+#include "../include/Utils.h"
 
 
 #include <iostream>
@@ -182,34 +183,57 @@ bool Player::quickMove(char direction){
   return true;
 }
 
-void Player::displayInventory(){
-  std::cout << "Your inventory. Type the letter next to the item to use or Cancel(c)" <<std::endl;
+std::string Player::getInventoryText(){
+  std::string result = "Your inventory. Type the letter next to the item to use it. Or (C)ancel. \n";
+
   for (const auto& pair : inventory) {
-    std::cout << "You have " << pair.second << " " << pair.first->getName() << " (" << pair.first->getCharacter() << ")" <<std::endl;
+    result += "You have " + std::to_string(pair.second) + " " +
+              pair.first->getName() +
+              " ('" + pair.first->getCharacter() + "')\n";
   }
+  return result;
 }
 
 bool Player::useItem(){
 
-  Item* itemToUse;
-  while(true){
-    this->displayInventory();
-    char choice;
-    std::cin >> choice;
+  std::string input;
+  Item* itemToUse = nullptr;
 
-    if(choice == 'c') return false;
+  // Validate input
+  while (true) {
+    input = promptUser(this->getInventoryText());
+
+    if (input.length() != 1) {
+      std::cout << "INPUT ERROR: Unrecognized token \"" << input << "\"\n";
+      continue;
+    }
+
+    char choice = input[0];
+
+    if (choice == 'C') {
+      return false; // Cancelled
+    }
 
     for (const auto& pair : inventory) {
-      if (pair.first->getCharacter() == choice) {
+      if (choice == pair.first->getCharacter()) {
         itemToUse = pair.first;
         break;
       }
     }
 
-    if(itemToUse == nullptr) continue;
+    if (itemToUse != nullptr) {
+      break; // Valid item selected
+    }
+
+    std::cout << "INPUT ERROR: Unrecognized token \"" << input << "\"\n";
+  }
+
+
+    if(input[0] == 'C') return false; // (C)ancel
+
     return itemToUse->useItem(this->getCurrentCell(), this);
   }
-}
+
 
 bool Player::hasItem(char useCharacter){
   for (const auto& pair : inventory) {
@@ -219,6 +243,7 @@ bool Player::hasItem(char useCharacter){
   }
   return false;
 }
+
 
 
 

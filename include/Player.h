@@ -59,7 +59,7 @@ class Player {
         bool isInHazzard(Cell* cell, Cell* previousCell);
         void randomMove();
 
-        void displayInventory();
+        std::string getInventoryText();
         bool useItem();
         // Returns a reference to the player's inventory.
         std::map<Item*, int>& getInventory() { return inventory; }
@@ -72,6 +72,8 @@ class Player {
         void setUsingRope(bool value) { usingRope = value; }
 
 };
+
+
 
 
 

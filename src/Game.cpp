@@ -6,11 +6,14 @@
 #include "../include/Player.h"
 #include "../include/Cell.h"
 #include "../include/Item.h"
+#include "../include/Utils.h"
 #include <iostream>
 #include <random>
 #include <vector>
 
 Game::Game(): map(), gameOver(false), player(new Player(map.spawnPlayer())){}
+
+
 
 void Game::start() {
     std::string input;
@@ -36,7 +39,6 @@ void Game::start() {
                 break;
             case 'I':
                 gameOver = player->useItem();
-                std::cin.ignore();
                 break;
             case 'N':
             case 'E':
@@ -52,12 +54,7 @@ void Game::start() {
     std::cerr << player->getCurrentCell()->getDeathMessage();
 }
 
-std::string promptUser(const std::string& message) {
-    std::cout << message;
-    std::string userInput;
-    std::getline(std::cin, userInput);
-    return userInput;
-}
+
 
 void Game::printCellData(Cell* cell){
     Cell* northCell = cell->getNorthCell();
