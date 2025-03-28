@@ -15,13 +15,12 @@ bool Bomb::useItem(Cell* originCell, Player* player){
   std::cout << "How do you want to use " << this->name << ". Ignite and Throw(t), Cancel(c)" << std::endl;
   std::cin >> choice;
 
-  if(originCell->getType() == GAS) return true;
-
   switch(choice){
     case 't':
     {
+      if(originCell->getType() == GAS) return true;
       Cell* cell = Item::promptForDirection(originCell, "throw");
-      if(cell == nullptr) useItem(originCell, player);
+      if(cell == nullptr) return useItem(originCell, player);
 
       player->destroyItem(ItemCharacter::BOMB);
       if(cell->hasWumpus()){
