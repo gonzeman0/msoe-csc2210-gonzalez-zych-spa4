@@ -3,7 +3,7 @@
 //
 #include "../include/Arrow.h"
 
-Arrow::Arrow() : Item("arrow", 'a') {}
+Arrow::Arrow() : Item("arrow", '>') {}
 
 bool Arrow::useItem(Cell* originCell, Player* player){
   return Item::useItem(originCell, player);

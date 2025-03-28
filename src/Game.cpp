@@ -16,25 +16,40 @@ void Game::start() {
     std::string input;
     map.spawnWumpus();
     while (!gameOver) {
-        map.printGrid();
 
         printCellData(player->getCurrentCell());
-        input = promptUser("Player = @. Move ('N', 'E', 'S', 'W'), Use Item(i) or exit ('EXIT'): ");
+        input = promptUser("Action: N)orth, E)ast, S)outh, W)est, I)nventory, M)ap, H)elp:  ");
 
-        if(input[0] == 'i'){
-            gameOver = player->useItem();
-            std::cin.ignore();
+        // All commands are a single character.
+        if (input.length() != 1) {
+            std::cout << "INPUT ERROR: Unrecognized token \"" << input << "\"" << std::endl;
             continue;
         }
 
-        if (input.length() == 1)
-            gameOver = player->move(input[0]);
-        else if (input == "EXIT")
-            gameOver = true;
-        else
-            std::cerr << "Error in Game::start(): Unrecognized token \"" << input << "\"" << std::endl;
+        // Actions
+        switch (input[0]) {
+            case 'M':
+                map.printGrid();
+                break;
+            case 'H':
+                std::cout << mapKey << helpText;
+                break;
+            case 'I':
+                gameOver = player->useItem();
+                std::cin.ignore();
+                break;
+            case 'N':
+            case 'E':
+            case 'S':
+            case 'W':
+                gameOver = player->move(input[0]);
+                break;
+            default:
+                std::cout << "INPUT ERROR: Unrecognized token \"" << input << "\"" << std::endl;
+                break;
+        }
     }
-    std::cout << player->getCurrentCell()->getDeathMessage();
+    std::cerr << player->getCurrentCell()->getDeathMessage();
 }
 
 std::string promptUser(const std::string& message) {

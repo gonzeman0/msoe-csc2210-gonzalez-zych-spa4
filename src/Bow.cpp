@@ -7,7 +7,7 @@
 
 #include <iostream>
 
-Bow::Bow() : Item("bow", 'b') {}
+Bow::Bow() : Item("bow", ')') {}
 
 bool Bow::useItem(Cell* originCell, Player* player){
   char choice;

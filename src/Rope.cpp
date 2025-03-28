@@ -8,7 +8,7 @@
 
 
 
-Rope::Rope() : Item("rope", 'r') {}
+Rope::Rope() : Item("rope", '?') {}
 
 bool Rope::useItem(Cell* originCell, Player* player){
   char choice;

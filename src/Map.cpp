@@ -13,6 +13,10 @@ Map::Map() {
     // Set random seed for random number generation
     std::srand(static_cast<unsigned int>(std::time(nullptr)));
 
+    // Instantiate dynamic Cell and Item objects.
+    instantiateItems(BOW_COUNT, ARROW_COUNT, BOMB_COUNT, ROPE_COUNT);
+
+    // Generate a map until a valid one is found.
     bool valid_map_created = false;
     while (!valid_map_created) {
         initializeGrid();
@@ -20,7 +24,18 @@ Map::Map() {
         valid_map_created = isTraversable();
     }
 
+    placeItemsRandomly(); // TODO
     placeExit();
+}
+
+Map::~Map() {
+    // Delete dynamic item objects.
+    for (int i = 0; i < BOW_COUNT + ARROW_COUNT + BOMB_COUNT + ROPE_COUNT; ++i) {
+        if (items[i] != nullptr) {  // Check if the pointer is valid
+            delete items[i];        // Free the dynamically allocated memory
+        }
+    }
+
 }
 
 void Map::printGrid() const {
@@ -72,11 +87,12 @@ void Map::printGrid() const {
                 break;
             }
 
+            // In order of display priority.
             if (grid[row][col].has_wumpus) {
                 displayChar = '#';
             } else if (grid[row][col].has_player) {
                 displayChar = '+';
-            } else if(grid[row][col].getItem() != nullptr) {
+            } else if(grid[row][col].item != nullptr) {
                 displayChar = grid[row][col].getItem()->getCharacter();
             }
 
@@ -95,6 +111,36 @@ void Map::printGrid() const {
     }
     std::cout << "+\n";
 }
+
+/**
+ * Populates the map's item array with the specified quantities of bows, arrows, bombs, and ropes.
+ * Items are added one by one in the provided order until the requested quantities are filled.
+ *
+ * @param bow_count The number of Bow items to instantiate.
+ * @param arrow_count The number of Arrow items to instantiate.
+ * @param bomb_count The number of Bomb items to instantiate.
+ * @param rope_count The number of Rope items to instantiate.
+ */
+void Map::instantiateItems(unsigned int bow_count, unsigned int arrow_count, unsigned int bomb_count, unsigned int rope_count) {
+    size_t index = 0;
+    while (bow_count > 0 || arrow_count > 0 || bomb_count > 0 || rope_count > 0) {
+        if (bow_count > 0) {
+            items[index] = new Bow();
+            bow_count--;
+        } else if (arrow_count > 0) {
+            items[index] = new Arrow();
+            arrow_count--;
+        } else if (bomb_count > 0) {
+            items[index] = new Bomb();
+            bomb_count--;
+        } else if (rope_count > 0) {
+            items[index] = new Rope();
+            rope_count--;
+        }
+        index++;
+    }
+}
+
 
 
 /**
@@ -159,55 +205,23 @@ void Map::addRandomHazards(unsigned int pit_count, unsigned int bat_count, unsig
     }
 }
 
-/**
- * Adds random items (bows, arrows, bombs, and rope) to the map until the specified counts are met.
- * The items are placed in random unoccupied cells in the grid.
- * If the total number of hazards exceeds the available number of cells in the grid,
- * an error message is displayed.
- *
- * @param pit_count The number of pit hazards to be placed on the map.
- * @param bat_count The number of bat hazards to be placed on the map.
- * @param gas_count The number of gas hazards to be placed on the map.
- */
-void Map::addRandomItems(unsigned int bow_count, unsigned int arrow_count, unsigned int bomb_count, unsigned int rope_count) {
-    // TODO: Implement this,
-    //  add dynamic item allocation (items are owned by Map, and passed to everyone else by reference)
-    //  add dynamic cell allocation (Statically allocate 2D array of raw pointers)
-    // // Statically allocated 2D array of raw pointers
-    // Cell* grid[rows][cols] = {nullptr};
-    //
-    // // Dynamically allocate some Cell objects
-    // grid[0][0] = new Cell(0, 0);
-    // grid[1][1] = new Cell(1, 1);
-    // grid[2][2] = new Cell(2, 2);
 
+void Map::placeItemsRandomly() {
+    size_t items_placed = 0;
+    const size_t item_count = BOMB_COUNT + ARROW_COUNT + BOW_COUNT + ROPE_COUNT;
+    while (items_placed < item_count) {
+        // Generate random location
+        const size_t row = std::rand() % row_count;
+        const size_t col = std::rand() % col_count;
 
-    // if ((bow_count + arrow_count + bomb_count + rope_count) > (row_count * col_count)) {
-    //     std::cerr << "ERROR in Map.addRandomHazards(): Not enough cells to place all hazards!";
-    // }
-    //
-    // // Keep placing hazards until the required count is reached
-    // while (bow_count > 0 || arrow_count > 0 || bomb_count > 0 || rope_count > 0) {
-    //     // Generate random location
-    //     const size_t row = std::rand() % row_count;
-    //     const size_t col = std::rand() % col_count;
-    //
-    //     // Check if the cell is already occupied
-    //     if (grid[row][col].type != ROOM || grid[row][col].item != nullptr)
-    //         continue;
-    //
-    //     // Place the hazards based on the required counts
-    //     if (bow_count > 0) {
-    //         grid[row][col].setItem();
-    //         pit_count--;
-    //     } else if (bat_count > 0) {
-    //         grid[row][col].type = BAT;
-    //         bat_count--;
-    //     } else if (gas_count > 0) {
-    //         grid[row][col].type = GAS;
-    //         gas_count--;
-    //     }
-    // }
+        // Check if the cell is already occupied
+        if (grid[row][col].type != ROOM || grid[row][col].item != nullptr)
+            continue;
+
+        // Place item
+        grid[row][col].item = items[items_placed];
+        items_placed++;
+    }
 }
 
 /**
@@ -323,7 +337,7 @@ Cell& Map::spawnPlayer() {
 
         // Get the cell at the random coordinates
         Cell* cell = &grid[row][col];
-        if (cell->type == ROOM && !cell->hasPlayer() && !cell->hasWumpus()) {
+        if (cell->type == ROOM && !cell->hasPlayer() && !cell->hasWumpus() && cell->getItem() == nullptr) {
             cell->setHasPlayer(true);
             return *cell;
         }

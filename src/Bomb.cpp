@@ -8,7 +8,7 @@
 
 #include <iostream>
 
-Bomb::Bomb() : Item("dynamite", 'd') {}
+Bomb::Bomb() : Item("dynamite", 'D') {}
 
 bool Bomb::useItem(Cell* originCell, Player* player){
   char choice;

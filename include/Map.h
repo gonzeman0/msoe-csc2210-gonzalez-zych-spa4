@@ -32,20 +32,34 @@ constexpr unsigned int BOMB_COUNT = 2;
 constexpr unsigned int ROPE_COUNT = 1;
 
 
-// The `Map` class represents a fixed-size grid-based map used in the game.
+/**
+ * Represents a 2D map grid composed of cells, which can contain a variety of types such as
+ * rooms, hazards, items, and other objects. The Map class supports functionality for the
+ * generation, validation, and interaction with the map's cells.
+ */
 // This map is comprised of `Cell` objects.
 //
 class Map {
+    // Statically allocate default cells
     Cell grid[ROWS][COLS];
-    char flood_grid[ROWS][COLS]{}; // Utilized by findTraversible();
+    // Statically allocate helper grid
+    char flood_grid[ROWS][COLS]{}; // Utilized by findTraversable();
+
+    // Statically allocate Cell pointers. Used for memory management of new Cells.
+    Cell* cells[PIT_COUNT + GAS_COUNT + BAT_COUNT]{nullptr};
+    // Statically allocate Item pointers. Used for memory management of new Items
+    Item* items[BOW_COUNT + ARROW_COUNT + BOMB_COUNT + ROPE_COUNT]{nullptr};
+
+    // Used for the instantiation of dynamic objects.
+    void instantiateItems(unsigned int bow_count, unsigned int arrow_count, unsigned int bomb_count, unsigned int rope_count);
 
     // Map generation methods. Documentation available in Map.cpp
-    void initializeGrid();
+    void initializeGrid(); // Sets defaults cells and connects intra-cell pointers.
     void addRandomHazards(unsigned int pit_count, unsigned int bat_count, unsigned int gas_count);
-    void addRandomItems(unsigned int bow_count, unsigned int arrow_count, unsigned int bomb_count, unsigned int rope_count);
+    void placeItemsRandomly();
     void placeExit();
 
-    // Map validation methods.c
+    // Map validation methods. Documentation available in Map.cpp
     bool isTraversable();
     void findTraversable(size_t row, size_t col, unsigned int& numFound);
 
@@ -67,6 +81,12 @@ public:
         * the logic ensures some level of traverseability.
         */
         Map();
+
+        /**
+         * Destructor destroys dynamically instantiated objects.
+         * Specifically, non-default cells (hazards) and items.
+         */
+        ~Map();
 
         /**
         * This method places a Wumpus on a randomly selected cell within the grid.

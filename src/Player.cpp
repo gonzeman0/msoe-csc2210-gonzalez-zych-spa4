@@ -14,7 +14,7 @@
 #include <iostream>
 #include <random>
 
-Player::Player(Cell& starting_cell): inventory() {
+Player::Player(Cell& starting_cell): inventory(), usingRope(false) {
 
     if (!starting_cell.hasPlayer()) {
         std::cerr << "ERROR in Player(): Starting cell must be previously assigned via Map::spawnPlayer()" << std::endl;
@@ -25,10 +25,6 @@ Player::Player(Cell& starting_cell): inventory() {
         return;
     }
 
-    pickup(new Bow());
-    pickup(new Arrow());
-    pickup(new Rope());
-    pickup(new Bomb());
     current_cell = &starting_cell;
     current_cell->setHasPlayer(true);
 }
