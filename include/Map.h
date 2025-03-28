@@ -5,28 +5,50 @@
 #ifndef MAP_H
 #define MAP_H
 
+#include "Bow.h"
+#include "Arrow.h"
+#include "Bomb.h"
+#include "Rope.h"
 #include "cell.h"
 #include <cstddef>
 
 // Fixed map size
-constexpr size_t ROWS = 8;
-constexpr size_t COLS = 8;
+constexpr size_t ROWS = 6;
+constexpr size_t COLS = 10;
+
+// Constants representing the number of hazards in the map:
+// - PIT_COUNT: Number of deadly pits (player dies on stepping here).
+// - GAS_COUNT: Number of gas hazards (potentially deadly if the player ignites it).
+// - BAT_COUNT: Number of non-lethal but unpredictable bats
+//   (they can drop the player in any random location, including into other hazards).
+constexpr unsigned int PIT_COUNT = 6;
+constexpr unsigned int GAS_COUNT = 10;
+constexpr unsigned int BAT_COUNT = 8;
+
+// Constants representing the number of items in the map
+constexpr unsigned int BOW_COUNT = 1;
+constexpr unsigned int ARROW_COUNT = 3;
+constexpr unsigned int BOMB_COUNT = 2;
+constexpr unsigned int ROPE_COUNT = 1;
 
 
-//
 // The `Map` class represents a fixed-size grid-based map used in the game.
 // This map is comprised of `Cell` objects.
 //
 class Map {
     Cell grid[ROWS][COLS];
-    char flood_grid[ROWS][COLS]; // Utilized by findTraversible();
+    char flood_grid[ROWS][COLS]{}; // Utilized by findTraversible();
 
     // Map generation methods. Documentation available in Map.cpp
     void initializeGrid();
     void addRandomHazards(unsigned int pit_count, unsigned int bat_count, unsigned int gas_count);
+    void addRandomItems(unsigned int bow_count, unsigned int arrow_count, unsigned int bomb_count, unsigned int rope_count);
+    void placeExit();
+
+    // Map validation methods.c
     bool isTraversable();
     void findTraversable(size_t row, size_t col, unsigned int& numFound);
-    void placeExit();
+
 
 public:
         // The number of rows composing the map
@@ -76,12 +98,14 @@ public:
         * for easier visualization. It uses different symbols to represent
         * various cell types:
         *
+        * - '+' represents the player
+        * - '#' represents the Wumpus
         * - '.' represents an empty ROOM.
-        * - 'P' represents a PIT hazard.
-        * - 'B' represents a BAT hazard.
+        * - '@' represents a PIT hazard.
+        * - '!' represents a BAT hazard.
         * - 'G' represents a GAS hazard.
         * - 'E' represents the EXIT.
-        * - '?' represents an unknown or unhandled cell state.
+        * - '_' represents an unknown or unhandled cell state.
         *
         * This function is primarily used for debugging purposes
         * to visualize the grid and the distribution of cell types.

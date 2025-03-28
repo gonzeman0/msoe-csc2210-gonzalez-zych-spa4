@@ -6,7 +6,6 @@
 #define CELL_H
 
 #include "Item.h"
-
 #include <iostream>
 #include <string>
 
@@ -52,12 +51,11 @@ class Cell {
         Item* getItem() const { return item; }
         bool hasPlayer() const { return has_player; }
         bool hasWumpus() const { return has_wumpus; }
+
         std::string getProximityMessage();
         std::string getCurrentCellMessage();
         std::string getDeathMessage();
         std::string getBasicThrowMessage(std::string message);
-
-
 
         Item* pickupItem();
         void setItem(Item* item) { this->item = item; }
