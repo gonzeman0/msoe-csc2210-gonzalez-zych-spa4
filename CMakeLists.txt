@@ -1,18 +1,15 @@
-cmake_minimum_required(VERSION 3.30)
-project(spa4_wumpus_game)
+cmake_minimum_required(VERSION 3.16)
+project(spa4_wumpus LANGUAGES CXX)
 
-# Set the required C++ standard
+# Set C++ standard
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
 
-# Create a list of source files
-file(GLOB_RECURSE SOURCES
-        ${CMAKE_SOURCE_DIR}/src/*.cpp
-)
+# Include headers from "include/"
+include_directories(include)
 
-# Add the executable target
-add_executable(spa4_wumpus_game ${SOURCES})
+# Add all source files from "src/"
+file(GLOB SOURCES "src/*.cpp")
 
-# Include the header files
-target_include_directories(spa4_wumpus_game PRIVATE ${CMAKE_SOURCE_DIR}/include)
+# Define the executable
+add_executable(spa4_wumpus ${SOURCES})

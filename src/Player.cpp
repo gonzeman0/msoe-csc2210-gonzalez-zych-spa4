@@ -26,9 +26,6 @@ Player::Player(Cell& starting_cell): inventory(), usingRope(false) {
         return;
     }
 
-    pickup(new Bow());
-    pickup(new Arrow());
-
     current_cell = &starting_cell;
     current_cell->setHasPlayer(true);
 }
@@ -75,6 +72,9 @@ bool Player::move(const char direction) {
 void Player::pickup(Item* item) {
     if (item == nullptr)
         return;
+
+    current_cell->setItem(nullptr); // Take ownership of item.
+
     auto it = inventory.find(item);
     std::cout << "You picked up " << item->getName() << std::endl;
     if (it != inventory.end()) {
@@ -97,6 +97,8 @@ void Player::destroyItem(char useCharacter) {
       std::cout << pair.first->getName() << " was lost" << std::endl;
 
       if(inventory[pair.first] == 0) {
+        // Frees memory
+        delete itemToDestroy;
         inventory.erase(itemToDestroy);
         return;
       }

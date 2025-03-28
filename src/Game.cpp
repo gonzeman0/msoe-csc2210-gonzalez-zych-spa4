@@ -22,10 +22,7 @@ void Game::start() {
 
         printCellData(player->getCurrentCell());
 
-        do {
-            input.clear();
-            input = promptUser("Action: N)orth, E)ast, S)outh, W)est, I)nventory, M)ap, H)elp:  ");
-        } while (input.empty());
+        input = promptUser("Action: N)orth, E)ast, S)outh, W)est, I)nventory, M)ap, H)elp:  ");
 
         // All commands are a single character.
         if (input.length() != 1) {

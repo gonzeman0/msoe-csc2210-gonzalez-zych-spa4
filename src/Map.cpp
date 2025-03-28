@@ -29,10 +29,13 @@ Map::Map() {
 }
 
 Map::~Map() {
-    // Delete dynamic item objects.
-    for (int i = 0; i < BOW_COUNT + ARROW_COUNT + BOMB_COUNT + ROPE_COUNT; ++i) {
-        if (items[i] != nullptr) {  // Check if the pointer is valid
-            delete items[i];        // Free the dynamically allocated memory
+    // Go through the grid and delete any items that haven't been deleted yet
+    for (size_t row = 0; row < row_count; ++row) {
+        for (size_t col = 0; col < col_count; ++col) {
+            if (grid[row][col].item != nullptr) {
+                delete grid[row][col].item; // Free the dynamically allocated memory
+                grid[row][col].item = nullptr; // Set the pointer to nullptr to avoid dangling references
+            }
         }
     }
 
