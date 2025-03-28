@@ -26,6 +26,9 @@ Player::Player(Cell& starting_cell): inventory(), usingRope(false) {
         return;
     }
 
+    pickup(new Bow());
+    pickup(new Arrow());
+
     current_cell = &starting_cell;
     current_cell->setHasPlayer(true);
 }
@@ -93,7 +96,10 @@ void Player::destroyItem(char useCharacter) {
       inventory[pair.first]--;
       std::cout << pair.first->getName() << " was lost" << std::endl;
 
-      if(inventory[pair.first] == 0) inventory.erase(itemToDestroy);
+      if(inventory[pair.first] == 0) {
+        inventory.erase(itemToDestroy);
+        return;
+      }
     }
   }
 }
