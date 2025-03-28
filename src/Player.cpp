@@ -125,7 +125,7 @@ bool Player::isInHazzard(Cell* cell, Cell* previousCell) {
       return true;
     case BAT:
       if(this->isUsingRope()){
-        std::cout << "There was a giant bat that tried to take you\nbut you get away using being tied to a rope" << std::endl;
+        std::cout << "There was a giant bat that tried to take you\nbut you get away being tied to a rope" << std::endl;
         this->setUsingRope(false);
         current_cell->setHasPlayer(false);
         current_cell = previousCell;
