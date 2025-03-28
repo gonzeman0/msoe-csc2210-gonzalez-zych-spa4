@@ -46,7 +46,8 @@ bool Bow::shoot(Cell* originCell, Player* player){
     cell->setItem(new Arrow());
   } else if(cell->getType() == BAT){
     cell->setType(ROOM);
-    std::cout << "You hear a sqeak and a thud in the distance" << std::endl;
+    std::cout << "You hear a squeak and a thud in the distance" << std::endl;
+    // TODO: fix unmanaged memory (new Arrow())
     cell->setItem(new Arrow());
   } else{
     std::cout << cell->getBasicThrowMessage("arrow");
