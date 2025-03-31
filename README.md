@@ -6,7 +6,10 @@
 
 ### Build Instructions
 The repository includes `CMakeList.txt`, which CLion should detect and use to configure the project automatically. Alternatvely, run the following command at the root of the project:
-<pre>g++ -std=c++20 -Iinclude src/*.cpp -o mygame</pre>
+<pre>g++ -std=c++20 -Iinclude src/*.cpp -o game</pre>
+This command will generate an executable in the same directory that runs the game. Running this executable in a terminal allows you to play thee game.
 
 ### Game Description
-TODO:
+The player's objective is to escape the cave while avoiding potentially deadly hazards such as the Wumpus, Giant Bats. The player must traverse carefully traverse cells using the hints in order to avoid any hazards. The player may stumble upon items that will let them defend themselves or access the exit. 
+
+
