@@ -11,8 +11,8 @@ This command will generate an executable in the same directory that runs the gam
 
 ### Debugging
 There are to main components to the game:
-1. Map generation. 
-2. Gameplay.
+1. Map generation. Creates a grid of Cell objects, links them with pointers, places hazards and items, and verifies that the exit will be accessible by the player.
+2. Gameplay. The actual gameplay: player movement, and item/cell interactions. 
 
 Map generation logic starts and ends in the `Game::Game()` constructor. Gameplay logic starts and ends in `Game::start()` method. If you utilize a debugger, it may be helpful to place your breakpoints at the start of these members. 
 
