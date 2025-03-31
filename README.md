@@ -9,7 +9,16 @@ The repository includes `CMakeList.txt`, which CLion should detect and use to co
 <pre>g++ -std=c++20 -Iinclude src/*.cpp -o game</pre>
 This command will generate an executable in the same directory that runs the game. Running this executable in a terminal allows you to play thee game.
 
+### Debugging
+There are to main components to the game:
+1. Map generation. 
+2. Gameplay.
+
+Map generation logic starts and ends in the `Game::Game()` constructor. Gameplay logic starts and ends in `Game::start()` method. If you utilize a debugger, it may be helpful to place your breakpoints at the start of these members. 
+
 ### Game Description
-The player's objective is to escape the cave while avoiding potentially deadly hazards such as the Wumpus, Giant Bats. The player must traverse carefully traverse cells using the hints in order to avoid any hazards. The player may stumble upon items that will let them defend themselves or access the exit. 
+The player's objective is to escape the cave while avoiding potentially deadly hazards such as the Wumpus, Giant Bats, gas room, or endless pits. The player must traverse carefully traverse cells using the hints in order to avoid any hazards. The player may stumble upon items that will let them defend themselves or access the exit. 
+
+A map can be accessed via 'M' to debug the game. 
 
 
