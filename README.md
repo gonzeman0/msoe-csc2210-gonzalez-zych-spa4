@@ -19,6 +19,6 @@ Map generation logic starts and ends in the `Game::Game()` constructor. Gameplay
 ### Game Description
 The player's objective is to escape the cave while avoiding potentially deadly hazards such as the Wumpus, Giant Bats, gas room, or endless pits. The player must traverse carefully traverse cells using the hints in order to avoid any hazards. The player may stumble upon items that will let them defend themselves or access the exit. 
 
-A map can be accessed via 'M' to debug the game. 
+A map can be accessed via 'M' to debug the gameplay logic.
 
 
